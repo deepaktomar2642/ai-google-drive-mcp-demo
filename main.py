@@ -1,5 +1,7 @@
 from drive_auth import authenticate_drive
 from drive_operations import list_files, upload_file, delete_file
+import openai
+openai.api_key = "YOUR_OPENAI_KEY"
 
 def main():
     service = authenticate_drive()
@@ -24,6 +26,14 @@ def main():
             break
         else:
             print("Unknown command!")
+
+def summarize_file(file_content):
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": f"Summarize this:\n{file_content}"}]
+    )
+    return response.choices[0].message.content
+
 
 if __name__ == "__main__":
     main()
